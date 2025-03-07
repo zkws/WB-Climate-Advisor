@@ -1,55 +1,90 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>WB Climate Advisor 🌍</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Climate Analysis Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>World Bank Climate Impact Advisor</h1>
-        <div class="input-group">
-            <input type="text" id="countryInput" placeholder="Enter country name">
-            <button onclick="analyze()">Generate Report</button>
+        <header>
+            <h1>Climate Risk Assessment Tool</h1>
+            <div class="input-group">
+                <input type="text" id="countryInput" 
+                       placeholder="Enter country name (e.g., 'Bangladesh')">
+                <button onclick="startAnalysis()">Generate Report</button>
+            </div>
+        </header>
+
+        <div class="output-container">
+            <div id="analysisProgress" class="progress-bar"></div>
+            <div id="analysisOutput" class="streaming-output"></div>
         </div>
-        
-        <div id="result">
-            <!-- Analysis content will be rendered here -->
-            <div id="analysisContent"></div>
-            <img id="chartVisualization" alt="Priority Chart">
+
+        <div class="visualization">
+            <h2>Risk Matrix Visualization</h2>
+            <div id="chartContainer"></div>
         </div>
     </div>
 
-    <!-- Include marked.js for markdown rendering -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-        async function analyze() {
+        let analysisBuffer = '';
+        
+        function startAnalysis() {
             const country = document.getElementById('countryInput').value.trim();
-            if (!country) return alert('Please enter a country name');
-            
-            try {
-                const response = await fetch('/analyze', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({country: country})
-                });
-                
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    // Render markdown content
-                    document.getElementById('analysisContent').innerHTML = marked.parse(data.analysis);
-                    document.getElementById('chartVisualization').src = data.chart;
-                } else {
-                    throw new Error(data.message);
-                }
-            } catch (error) {
-                console.error('API Error:', error);
-                alert('Analysis failed. Please try again later.');
+            if (!country) {
+                alert('Please enter a valid country name');
+                return;
             }
+
+            // Reset UI elements
+            const outputEl = document.getElementById('analysisOutput');
+            outputEl.innerHTML = '';
+            analysisBuffer = '';
+            document.getElementById('analysisProgress').style.width = '0%';
+
+            // Initialize SSE connection
+            const eventSource = new EventSource(`/analyze?country=${encodeURIComponent(country)}`);
+            
+            eventSource.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                
+                if (data.error) {
+                    showError(data.error);
+                    eventSource.close();
+                    return;
+                }
+
+                analysisBuffer += data.content;
+                outputEl.innerHTML = marked.parse(analysisBuffer);
+                outputEl.scrollTop = outputEl.scrollHeight;
+            };
+
+            eventSource.addEventListener('end', () => {
+                eventSource.close();
+                renderVisualization();
+            });
+
+            eventSource.onerror = () => {
+                showError('Connection to server failed');
+                eventSource.close();
+            };
+        }
+
+        function showError(message) {
+            const outputEl = document.getElementById('analysisOutput');
+            outputEl.innerHTML = `
+                <div class="error-alert">⚠️ Error: ${message}</div>
+            `;
+        }
+
+        function renderVisualization() {
+            // D3.js or Chart.js implementation would go here
+            document.getElementById('chartContainer').innerHTML = `
+                <p class="placeholder">Risk visualization will be implemented here</p>
+            `;
         }
     </script>
 </body>
 </html>
-

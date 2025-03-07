@@ -1,0 +1,100 @@
+/* Base styles */
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background: #f5f7fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+/* Input styling */
+.input-group {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+button {
+    padding: 12px 35px;
+    background: #2c974b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #22863a;
+}
+
+/* Streaming output styling */
+.streaming-output {
+    min-height: 400px;
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    background: #f8f9fa;
+}
+
+.progress-bar {
+    height: 4px;
+    background: #e0e0e0;
+    margin-bottom: 15px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    display: block;
+    width: 0%;
+    height: 100%;
+    background: #2c974b;
+    transition: width 0.3s ease;
+}
+
+/* Error states */
+.error-alert {
+    padding: 15px;
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 6px;
+    margin: 15px 0;
+}
+
+/* Visualization section */
+.visualization {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #eee;
+}
+
+#chartContainer {
+    min-height: 300px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 15px;
+}
