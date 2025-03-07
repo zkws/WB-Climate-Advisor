@@ -7,7 +7,7 @@ import requests
 app = Flask(__name__)
 CORS(app)  # Enable Cross-Origin Resource Sharing
 
-DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
+DEEPSEEK_API_URL = "https://maas-api.cn-huabei-1.xf-yun.com/v1/chat/completions"
 API_KEY = os.getenv('DEEPSEEK_KEY')
 
 def get_deepseek_response(prompt):
