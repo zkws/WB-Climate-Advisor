@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 import os
 import requests
@@ -7,8 +7,15 @@ import requests
 app = Flask(__name__)
 CORS(app)  # Enable Cross-Origin Resource Sharing
 
+
 DEEPSEEK_API_URL = "https://maas-api.cn-huabei-1.xf-yun.com/v1/chat/completions"
 API_KEY = os.getenv('DEEPSEEK_KEY')
+
+@app.route("/")
+def home():
+    return render_template('index.html')
+    # return "Hello, World!"
+
 
 def get_deepseek_response(prompt):
     headers = {
@@ -17,7 +24,7 @@ def get_deepseek_response(prompt):
     }
     
     payload = {
-        "model": "deepseek-chat",
+        "model": "xdeepseekv3",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7
     }
@@ -60,3 +67,7 @@ def generate_chart():
     """Generate sample chart using QuickChart.io"""
     # This is a static example. For real implementation, connect to data API.
     return "https://quickchart.io/chart?c={type:'bar',data:{labels:['Agriculture','Infrastructure','Healthcare'],datasets:[{label:'Priority',data:[8,9,6]}]}}"
+
+
+# if __name__ == '__main__':
+#     app.run()

@@ -1,1 +1,55 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WB Climate Advisor 🌍</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>World Bank Climate Impact Advisor</h1>
+        <div class="input-group">
+            <input type="text" id="countryInput" placeholder="Enter country name">
+            <button onclick="analyze()">Generate Report</button>
+        </div>
+        
+        <div id="result">
+            <!-- Analysis content will be rendered here -->
+            <div id="analysisContent"></div>
+            <img id="chartVisualization" alt="Priority Chart">
+        </div>
+    </div>
+
+    <!-- Include marked.js for markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        async function analyze() {
+            const country = document.getElementById('countryInput').value.trim();
+            if (!country) return alert('Please enter a country name');
+            
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({country: country})
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Render markdown content
+                    document.getElementById('analysisContent').innerHTML = marked.parse(data.analysis);
+                    document.getElementById('chartVisualization').src = data.chart;
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                alert('Analysis failed. Please try again later.');
+            }
+        }
+    </script>
+</body>
+</html>
 
