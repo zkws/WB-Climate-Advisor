@@ -1,4 +1,4 @@
 Flask==3.1.0
 flask-cors==5.0.1
 requests==2.32.3
-onpenai==1.65.4
+onpenai
