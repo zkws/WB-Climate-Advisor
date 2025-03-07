@@ -69,5 +69,5 @@ def generate_chart():
     return "https://quickchart.io/chart?c={type:'bar',data:{labels:['Agriculture','Infrastructure','Healthcare'],datasets:[{label:'Priority',data:[8,9,6]}]}}"
 
 
-# if __name__ == '__main__':
-#     app.run()
+if __name__ == '__main__':
+    app.run(debug=True)
