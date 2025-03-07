@@ -6,6 +6,8 @@ A modern web application for generating climate risk assessment reports using AI
 
 Live Demo: https://wb-climate-advisor.vercel.app/
 
+![preview](./demo-screenshot01.png)
+![preview](./demo-screenshot02.png)
 
 Test Cases:
 1. Input "Bangladesh" → Coastal flooding risks
